@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 import {
   User,
   Bookmark,
@@ -27,25 +27,20 @@ function Dashboard() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        // Saved Schemes
         const saved =
           JSON.parse(localStorage.getItem("savedSchemes")) || [];
 
         setSavedCount(saved.length);
 
-        // Eligible Schemes
-        const res = await axios.post(
-          "http://localhost:5000/api/recommend",
-          {
-            age: user?.age,
-            gender: user?.gender,
-            occupation: user?.occupation,
-            income: user?.income,
-            state: user?.state,
-            district: user?.district,
-            category: user?.category,
-          }
-        );
+        const res = await api.post("/recommend", {
+          age: user?.age,
+          gender: user?.gender,
+          occupation: user?.occupation,
+          income: user?.income,
+          state: user?.state,
+          district: user?.district,
+          category: user?.category,
+        });
 
         setEligibleCount(res.data.length);
       } catch (err) {
@@ -81,8 +76,6 @@ function Dashboard() {
       <div className="min-h-screen bg-slate-100">
 
         <div className="max-w-7xl mx-auto px-6 py-10">
-
-          {/* Hero Section */}
 
           <motion.div
             initial={{ opacity: 0, y: -40 }}
@@ -124,8 +117,6 @@ function Dashboard() {
 
           </motion.div>
 
-          {/* Statistics */}
-
           <div className="grid md:grid-cols-3 gap-6 mt-10">
 
             <StatCard
@@ -147,8 +138,6 @@ function Dashboard() {
             />
 
           </div>
-
-          {/* Quick Actions */}
 
           <h2 className="text-3xl font-bold mt-14 mb-6">
             Quick Actions
@@ -178,8 +167,6 @@ function Dashboard() {
             />
 
           </div>
-
-          {/* Profile */}
 
           <Card className="mt-12 rounded-3xl shadow-lg">
 

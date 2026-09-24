@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import Navbar from "../components/Navbar";
 import {
   Upload,
@@ -7,21 +6,16 @@ import {
   ShieldCheck,
   CheckCircle,
 } from "lucide-react";
+import api from "../services/api";
 
 export default function DocumentVerification() {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [ocrText, setOcrText] = useState("");
-
   const [documentType, setDocumentType] = useState("");
-
   const [status, setStatus] = useState("");
-
   const [confidence, setConfidence] = useState(0);
-
-  // NEW
   const [data, setData] = useState({});
-
   const [loading, setLoading] = useState(false);
 
   const uploadDocument = async () => {
@@ -37,8 +31,8 @@ export default function DocumentVerification() {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/document/upload",
+      const res = await api.post(
+        "/document/upload",
         formData,
         {
           headers: {
@@ -48,23 +42,21 @@ export default function DocumentVerification() {
       );
 
       setOcrText(res.data.extractedText);
-
       setDocumentType(res.data.documentType);
-
       setStatus(res.data.status);
-
       setConfidence(res.data.confidence);
-
-      // NEW
       setData(res.data.extractedData);
 
     } catch (err) {
       console.log(err);
 
-      alert("OCR Failed");
+      alert(
+        err.response?.data?.message ||
+        "OCR Failed"
+      );
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -74,8 +66,6 @@ export default function DocumentVerification() {
       <div className="min-h-screen bg-slate-100 py-10">
 
         <div className="max-w-6xl mx-auto">
-
-          {/* Header */}
 
           <div className="bg-gradient-to-r from-blue-700 to-cyan-600 text-white rounded-3xl p-10 shadow-xl">
 
@@ -89,11 +79,7 @@ export default function DocumentVerification() {
 
           </div>
 
-          {/* Upload + OCR */}
-
           <div className="grid md:grid-cols-2 gap-8 mt-10">
-
-            {/* Upload */}
 
             <div className="bg-white rounded-3xl shadow-lg p-8">
 
@@ -117,7 +103,8 @@ export default function DocumentVerification() {
 
               <button
                 onClick={uploadDocument}
-                className="mt-8 w-full bg-blue-700 hover:bg-blue-800 text-white rounded-xl py-4 font-bold"
+                disabled={loading}
+                className="mt-8 w-full bg-blue-700 hover:bg-blue-800 disabled:bg-blue-400 text-white rounded-xl py-4 font-bold"
               >
                 {loading
                   ? "Processing..."
@@ -125,8 +112,6 @@ export default function DocumentVerification() {
               </button>
 
             </div>
-
-            {/* OCR Result */}
 
             <div className="bg-white rounded-3xl shadow-lg p-8">
 
@@ -149,8 +134,6 @@ export default function DocumentVerification() {
             </div>
 
           </div>
-
-          {/* Verification */}
 
           {ocrText && (
 
@@ -189,12 +172,8 @@ export default function DocumentVerification() {
 
               </div>
 
-              {/* Extracted Information */}
-
               <h2 className="text-2xl font-bold mt-10 mb-6">
-
                 Extracted Information
-
               </h2>
 
               <div className="grid md:grid-cols-2 gap-5">
@@ -238,16 +217,12 @@ export default function DocumentVerification() {
                   <div>
 
                     <h2 className="text-xl font-bold text-green-700">
-
                       OCR Verification Completed
-
                     </h2>
 
                     <p className="text-green-700 mt-2">
-
                       Your uploaded document has been
                       successfully processed.
-
                     </p>
 
                   </div>
@@ -263,7 +238,6 @@ export default function DocumentVerification() {
         </div>
 
       </div>
-
     </>
   );
 }
@@ -277,9 +251,7 @@ function InfoCard({
     <div className="bg-slate-100 rounded-2xl p-5">
 
       <p className="text-slate-500 mb-2">
-
         {title}
-
       </p>
 
       <h3

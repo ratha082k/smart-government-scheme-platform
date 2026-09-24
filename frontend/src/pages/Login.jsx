@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Navbar from "../components/Navbar";
+import api from "../services/api";
 
 function Login() {
   const navigate = useNavigate();
@@ -27,13 +27,16 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+      const res = await api.post(
+        "/auth/login",
         form
       );
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.data.user)
+      );
 
       alert("✅ Login Successful");
 
@@ -61,6 +64,7 @@ function Login() {
           background: "#f4f7fb",
         }}
       >
+
         <div
           style={{
             width: "420px",
@@ -70,6 +74,7 @@ function Login() {
             boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
           }}
         >
+
           <h1
             style={{
               textAlign: "center",
@@ -81,6 +86,7 @@ function Login() {
           </h1>
 
           <form onSubmit={handleSubmit}>
+
             <input
               type="email"
               name="email"
@@ -92,6 +98,7 @@ function Login() {
             />
 
             <div style={{ position: "relative" }}>
+
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -104,7 +111,9 @@ function Login() {
 
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
                 style={{
                   position: "absolute",
                   right: "10px",
@@ -116,14 +125,18 @@ function Login() {
               >
                 {showPassword ? "🙈" : "👁"}
               </button>
+
             </div>
 
             <button
               style={buttonStyle}
               disabled={loading}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading
+                ? "Logging in..."
+                : "Login"}
             </button>
+
           </form>
 
           <p
@@ -145,8 +158,11 @@ function Login() {
             >
               Register
             </Link>
+
           </p>
+
         </div>
+
       </div>
     </>
   );

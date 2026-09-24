@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import Navbar from "../components/Navbar";
+import api from "../services/api";
 
 export default function Chatbot() {
   const [question, setQuestion] = useState("");
+
   const [messages, setMessages] = useState(() => {
-  return JSON.parse(localStorage.getItem("chatHistory")) || [];
-});
+    return JSON.parse(localStorage.getItem("chatHistory")) || [];
+  });
+
   const [loading, setLoading] = useState(false);
 
   const bottomRef = useRef(null);
@@ -17,12 +19,13 @@ export default function Chatbot() {
       behavior: "smooth",
     });
   }, [messages, loading]);
+
   useEffect(() => {
-  localStorage.setItem(
-    "chatHistory",
-    JSON.stringify(messages)
-  );
-}, [messages]);
+    localStorage.setItem(
+      "chatHistory",
+      JSON.stringify(messages)
+    );
+  }, [messages]);
 
   const askAI = async () => {
     if (!question.trim()) return;
@@ -41,16 +44,13 @@ export default function Chatbot() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/chatbot",
-        {
-          message: userQuestion,
+      const res = await api.post("/chatbot", {
+        message: userQuestion,
 
-userDetails: JSON.parse(
-  localStorage.getItem("user")
-),
-        }
-      );
+        userDetails: JSON.parse(
+          localStorage.getItem("user")
+        ),
+      });
 
       setMessages((prev) => [
         ...prev,
@@ -60,6 +60,8 @@ userDetails: JSON.parse(
         },
       ]);
     } catch (err) {
+      console.error("Chatbot Error:", err);
+
       setMessages((prev) => [
         ...prev,
         {
@@ -91,66 +93,67 @@ userDetails: JSON.parse(
 
             <div className="bg-blue-700 text-white p-5 flex justify-between items-center">
 
-  <h2 className="text-2xl font-bold">
-    🤖 SmartGov AI Assistant
-  </h2>
+              <h2 className="text-2xl font-bold">
+                🤖 SmartGov AI Assistant
+              </h2>
 
-  <button
-  onClick={() => {
-    setMessages([]);
-    localStorage.removeItem("chatHistory");
-  }}
-  className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg"
->
-  Clear Chat
-</button>
-</div>
+              <button
+                onClick={() => {
+                  setMessages([]);
+                  localStorage.removeItem("chatHistory");
+                }}
+                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg"
+              >
+                Clear Chat
+              </button>
+
+            </div>
 
             {/* Messages */}
 
             <div className="h-[65vh] overflow-y-auto p-6 bg-slate-50">
 
               {messages.length === 0 && (
-  <div className="text-center mt-20">
+                <div className="text-center mt-20">
 
-    <h2 className="text-3xl font-bold text-blue-700">
-      🤖 Welcome to SmartGov AI
-    </h2>
+                  <h2 className="text-3xl font-bold text-blue-700">
+                    🤖 Welcome to SmartGov AI
+                  </h2>
 
-    <p className="text-gray-600 mt-3">
-      Ask anything about Indian Government Schemes
-    </p>
+                  <p className="text-gray-600 mt-3">
+                    Ask anything about Indian Government Schemes
+                  </p>
 
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
 
-      {[
-        "PM Kisan",
-        "Ayushman Bharat",
-        "PM Awas Yojana",
-        "Mudra Loan",
-        "National Scholarship",
-        "Startup India",
-        "Women Welfare Schemes",
-        "Farmer Schemes",
-        "Senior Citizen Pension"
-      ].map((item) => (
+                    {[
+                      "PM Kisan",
+                      "Ayushman Bharat",
+                      "PM Awas Yojana",
+                      "Mudra Loan",
+                      "National Scholarship",
+                      "Startup India",
+                      "Women Welfare Schemes",
+                      "Farmer Schemes",
+                      "Senior Citizen Pension",
+                    ].map((item) => (
 
-        <button
-          key={item}
-          onClick={() => {
-            setQuestion(item);
-          }}
-          className="bg-white hover:bg-blue-700 hover:text-white border border-blue-600 rounded-xl p-4 shadow transition font-semibold"
-        >
-          {item}
-        </button>
+                      <button
+                        key={item}
+                        onClick={() => {
+                          setQuestion(item);
+                        }}
+                        className="bg-white hover:bg-blue-700 hover:text-white border border-blue-600 rounded-xl p-4 shadow transition font-semibold"
+                      >
+                        {item}
+                      </button>
 
-      ))}
+                    ))}
 
-    </div>
+                  </div>
 
-  </div>
-)}
+                </div>
+              )}
 
               {messages.map((msg, index) => (
                 <div
@@ -161,6 +164,7 @@ userDetails: JSON.parse(
                       : "justify-start"
                   }`}
                 >
+
                   {msg.role === "assistant" && (
                     <div className="text-3xl mr-3">
                       🤖
@@ -174,6 +178,7 @@ userDetails: JSON.parse(
                         : "bg-white"
                     }`}
                   >
+
                     {msg.role === "assistant" ? (
                       <ReactMarkdown
                         components={{
@@ -248,6 +253,7 @@ userDetails: JSON.parse(
                     ) : (
                       <p>{msg.text}</p>
                     )}
+
                   </div>
 
                   {msg.role === "user" && (
@@ -255,22 +261,31 @@ userDetails: JSON.parse(
                       👤
                     </div>
                   )}
+
                 </div>
               ))}
 
               {loading && (
                 <div className="flex items-center">
+
                   <div className="text-3xl mr-3">
                     🤖
                   </div>
 
                   <div className="bg-white rounded-xl px-5 py-3 shadow">
+
                     <div className="flex gap-2">
+
                       <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+
                       <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+
                       <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+
                     </div>
+
                   </div>
+
                 </div>
               )}
 

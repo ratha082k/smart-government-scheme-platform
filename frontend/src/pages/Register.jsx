@@ -1,7 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import api from "../services/api";
 
 function Register() {
   const navigate = useNavigate();
@@ -33,20 +33,24 @@ function Register() {
     setLoading(true);
 
     try {
-      await axios.post(
-        "http://localhost:5000/api/auth/register",
+      await api.post(
+        "/auth/register",
         form
       );
 
       alert("✅ Registration Successful");
+
       navigate("/login");
+
     } catch (err) {
+
       console.log(err);
 
       alert(
         err.response?.data?.message ||
-          "Registration Failed. Please try again."
+        "Registration Failed. Please try again."
       );
+
     } finally {
       setLoading(false);
     }
@@ -66,6 +70,7 @@ function Register() {
           padding: "30px",
         }}
       >
+
         <div
           style={{
             width: "500px",
@@ -75,6 +80,7 @@ function Register() {
             boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
           }}
         >
+
           <h1
             style={{
               textAlign: "center",
@@ -86,6 +92,7 @@ function Register() {
           </h1>
 
           <form onSubmit={handleSubmit}>
+
             <input
               type="text"
               name="name"
@@ -107,6 +114,7 @@ function Register() {
             />
 
             <div style={{ position: "relative" }}>
+
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -119,7 +127,9 @@ function Register() {
 
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
                 style={{
                   position: "absolute",
                   right: "10px",
@@ -132,6 +142,7 @@ function Register() {
               >
                 {showPassword ? "🙈" : "👁"}
               </button>
+
             </div>
 
             <input
@@ -177,20 +188,41 @@ function Register() {
               style={inputStyle}
               required
             >
-              <option value="">Select Category</option>
-              <option value="General">General</option>
-              <option value="BC">BC</option>
-              <option value="MBC">MBC</option>
-              <option value="SC">SC</option>
-              <option value="ST">ST</option>
+              <option value="">
+                Select Category
+              </option>
+
+              <option value="General">
+                General
+              </option>
+
+              <option value="BC">
+                BC
+              </option>
+
+              <option value="MBC">
+                MBC
+              </option>
+
+              <option value="SC">
+                SC
+              </option>
+
+              <option value="ST">
+                ST
+              </option>
+
             </select>
 
             <button
               style={buttonStyle}
               disabled={loading}
             >
-              {loading ? "Creating Account..." : "Register"}
+              {loading
+                ? "Creating Account..."
+                : "Register"}
             </button>
+
           </form>
 
           <p
@@ -212,8 +244,11 @@ function Register() {
             >
               Login
             </Link>
+
           </p>
+
         </div>
+
       </div>
     </>
   );
