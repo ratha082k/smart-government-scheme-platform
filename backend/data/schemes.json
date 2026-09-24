@@ -1,0 +1,76 @@
+[
+  {
+    "name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "description": "Provides income support to eligible landholding farmer families.",
+    "schemeType": "Central",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+
+    "benefits": [
+      "₹6,000 per year in three equal instalments"
+    ],
+
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 120,
+
+      "genders": ["Male", "Female"],
+
+      "socialCategories": [
+        "General",
+        "BC",
+        "MBC",
+        "OBC",
+        "SC",
+        "ST",
+        "EWS"
+      ],
+
+      "occupations": [
+        "Farmer"
+      ],
+
+      "educationLevels": [
+        "Any"
+      ],
+
+      "annualIncomeMin": 0,
+      "annualIncomeMax": 999999999,
+
+      "states": [
+        "All"
+      ],
+
+      "districts": [
+        "All"
+      ],
+
+      "maritalStatus": [
+        "Any"
+      ],
+
+      "minorityRequired": false,
+      "disabilityRequired": false,
+      "bplRequired": false,
+      "farmerRequired": true,
+      "studentRequired": false,
+      "widowRequired": false,
+      "seniorCitizenRequired": false
+    },
+
+    "documentsRequired": [
+      "Aadhaar Card",
+      "Bank Account",
+      "Land Records"
+    ],
+
+    "applicationProcess": "Apply through the PM-KISAN portal or Common Service Centre (CSC).",
+
+    "officialWebsite": "https://pmkisan.gov.in",
+
+    "officialApplyLink": "https://pmkisan.gov.in",
+
+    "source": "PM-KISAN Official Portal",
+
+    "lastVerified": "2026-01-01T00:00:00.000Z"
+  }
+]
