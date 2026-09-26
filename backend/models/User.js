@@ -1,28 +1,95 @@
 import mongoose from "mongoose";
 
-const userProfileSchema = new mongoose.Schema({
-  age: Number,
-  gender: String,
-  category: String,
-  occupation: String,
-  annualIncome: Number,
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-  state: String,
-  district: String,
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
 
-  education: String,
+    password: {
+      type: String,
+      required: true,
+    },
 
-  disability: Boolean,
+    phone: {
+      type: String,
+      trim: true,
+    },
 
-  minority: Boolean,
+    age: {
+      type: Number,
+    },
 
-  bpl: Boolean,
+    gender: {
+      type: String,
+    },
 
-  farmer: Boolean,
+    occupation: {
+      type: String,
+    },
 
-  student: Boolean,
+    income: {
+      type: Number,
+    },
 
-  maritalStatus: String,
-});
+    state: {
+      type: String,
+    },
 
-export default mongoose.model("UserProfile", userProfileSchema);
+    district: {
+      type: String,
+    },
+
+    category: {
+      type: String,
+    },
+
+    education: {
+      type: String,
+    },
+
+    disability: {
+      type: Boolean,
+      default: false,
+    },
+
+    minority: {
+      type: Boolean,
+      default: false,
+    },
+
+    bpl: {
+      type: Boolean,
+      default: false,
+    },
+
+    farmer: {
+      type: Boolean,
+      default: false,
+    },
+
+    student: {
+      type: Boolean,
+      default: false,
+    },
+
+    maritalStatus: {
+      type: String,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export default mongoose.model("User", userSchema);

@@ -19,8 +19,13 @@ export const registerUser = async (req, res) => {
       category,
     } = req.body;
 
+    // Normalize email
+    const normalizedEmail = email?.trim().toLowerCase();
+
     // Check if email already exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({
+      email: normalizedEmail,
+    });
 
     if (userExists) {
       return res.status(400).json({
@@ -35,7 +40,7 @@ export const registerUser = async (req, res) => {
     // Create user
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       phone,
       age,
@@ -66,8 +71,13 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Normalize email
+    const normalizedEmail = email?.trim().toLowerCase();
+
     // Find user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      email: normalizedEmail,
+    });
 
     if (!user) {
       return res.status(400).json({
